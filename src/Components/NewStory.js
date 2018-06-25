@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import uuidv1 from 'uuid/v1';
 import {Editor, EditorState, RichUtils, getDefaultKeyBinding} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-import uuidv1 from 'uuid/v1';
-
-import '../RichText.css';
 
 import BlockStyleControls from './RichText/BlockStyleControls';
 import InlineStyleControls from './RichText/InlineStyleControls';
+
+import '../RichText.css';
 
 export default class NewStory extends Component {
   constructor(props) {
@@ -17,6 +17,7 @@ export default class NewStory extends Component {
         body: '',
         done: 'no'
       };
+
       this.focus = () => this.refs.editor.focus();
       this.onChange = this.onChange.bind(this);
       this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -30,7 +31,7 @@ export default class NewStory extends Component {
       this.setState({editorState});
       const contentState = this.state.editorState.getCurrentContent();
       const html = stateToHTML(contentState);
-      this.state.title && this.state.body ? this.setState({done: 'done'}) : console.log('do nothing');
+      this.state.title && this.state.body ? this.setState({done: 'done'}) : console.log('Made by Zonayed Ahmed, My portfolio: https://www.zonayed.me');
       this.setState({body: html});
     }
 
@@ -77,15 +78,16 @@ export default class NewStory extends Component {
     }
 
     handleSubmit() {
-      if(this.state.title && this.state.body) {
-        let newStory = {id: uuidv1(), title: this.state.title, body: this.state.body, bookmark: false};
+      const { title, body } = this.state;
+      if(title && body) {
+        let newStory = {id: uuidv1(), title, body, bookmark: false};
         this.props.handleSubmission(newStory);
         this.setState({editorState: EditorState.createEmpty(), title: '', body: '', done: 'submitted'});
       }
     }
 
     render() {
-      const {editorState} = this.state;
+      const { editorState } = this.state;
       let className = 'RichEditor-editor';
       var contentState = editorState.getCurrentContent();
       if (!contentState.hasText()) {
@@ -94,9 +96,11 @@ export default class NewStory extends Component {
         }
       }
 
+      const { title, done } = this.state;
+
       return (
         <div className="richtext-editor">
-          <input type="text" className="input-title" value={this.state.title} onChange={(e) => this.setState({title: e.target.value})} placeholder="Title" />
+          <input type="text" className="input-title" value={title} onChange={(e) => this.setState({title: e.target.value})} placeholder="Title" />
           <BlockStyleControls
             editorState={editorState}
             onToggle={this.toggleBlockType}
@@ -117,7 +121,7 @@ export default class NewStory extends Component {
               spellCheck={true}
             />
           </div>
-          {this.state.done ==='done' ? <button onClick={this.handleSubmit} className="btn btn-submit">Submit</button> : ( this.state.done==='submitted' ? <span className="msg-success">Your story has been submitted</span> : <span className="msg-error">You havent finished writing your story</span>)}
+          {done ==='done' ? <button onClick={this.handleSubmit} className="btn btn-submit">Submit</button> : (done==='submitted' ? <span className="msg-success">Your story has been submitted</span> : <span className="msg-error">You havent finished writing your story</span>)}
         </div>
       );
 

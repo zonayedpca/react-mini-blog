@@ -11,7 +11,7 @@ import Footer from './Components/Footer';
 import './App.css';
 import data from './data';
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,6 +21,7 @@ class App extends Component {
     this.handleBookmark = this.handleBookmark.bind(this);
     this.handleRemoveBookmark = this.handleRemoveBookmark.bind(this);
     this.handleSubmission = this.handleSubmission.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   handleBookmark(data) {
@@ -41,6 +42,18 @@ class App extends Component {
     this.setState({posts});
   }
 
+  handleRemove(post, history) {
+    let posts = this.state.posts;
+    posts = posts.filter(onepost => onepost !== post);
+    this.setState({posts});
+    history.push('/');
+    this.handleWindow();
+  }
+
+  handleWindow() {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     return (
       <Router basename="/react-mini-blog">
@@ -49,12 +62,10 @@ class App extends Component {
           <Route exact path="/" render={() => <Content posts={this.state.posts} bookmarks={this.state.posts.filter(post => post.bookmark)} handleBookmark={this.handleBookmark} handleRemoveBookmark={this.handleRemoveBookmark} />} />
           <Route exact path="/new" render={() => <NewStory handleSubmission={this.handleSubmission} />} />
           <Route exact path="/bookmark" render={() => <Bookmark bookmarks={this.state.posts.filter(post => post.bookmark)} />} />
-          <Route exact path="/post/:id" render={(props) => <SinglePost {...props} posts={this.state.posts} handleBookmark={this.handleBookmark} handleRemoveBookmark={this.handleRemoveBookmark} />} />
+          <Route exact path="/post/:id" render={(props) => <SinglePost {...props} posts={this.state.posts} handleBookmark={this.handleBookmark} handleRemoveBookmark={this.handleRemoveBookmark} handleRemove={this.handleRemove} handleWindow={this.handleWindow()} />} />
           <Footer/>
         </div>
       </Router>
     );
   }
 }
-
-export default App;

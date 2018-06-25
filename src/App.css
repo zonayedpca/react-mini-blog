@@ -194,8 +194,14 @@ a.btn {
 }
 
 .btn-remove-bookmarks {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-remove {
   background-color: #F44336;
   color: #fff;
+  margin-left: 15px;
 }
 
 .btn-submit {

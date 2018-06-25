@@ -1,21 +1,17 @@
 import React from 'react';
 import renderHTML from 'react-render-html';
 import { Link } from 'react-router-dom';
+import { leveningStr } from '../helper';
 
 export default ({post, handleBookmark, handleRemoveBookmark}) => {
-  const leveningStr = (data) => {
-    let string = data.split(/<\/?\w*>/);
-    string = string.reduce((data, one)=>data+=one);
-    string = string.substr(0, 250);
-    return string;
-  }
+  const { id, title, body, bookmark } = post;
   return (
     <div className="post">
-      <h3><Link to={`/post/${post.id}`}>{post.title}</Link></h3>
-      <p>{renderHTML(leveningStr(post.body))}</p>
+      <h3><Link to={`/post/${id}`}>{title}</Link></h3>
+      <p>{renderHTML(leveningStr(body, 250))}</p>
       <ul>
-        <li><Link to={`/post/${post.id}`} className="btn btn-more">Read More</Link></li>
-        <li>{post.bookmark ? <button className="btn btn-remove-bookmarks" onClick={() => handleRemoveBookmark(post)} >Remove from Bookmark</button> : <button className="btn btn-bookmarks" onClick={() => handleBookmark(post)} >Add to Bookmark</button>}</li>
+        <li><Link to={`/post/${id}`} className="btn btn-more">Read More</Link></li>
+        <li>{bookmark ? <button className="btn btn-remove-bookmarks" onClick={() => handleRemoveBookmark(post)} >Remove from Bookmark</button> : <button className="btn btn-bookmarks" onClick={() => handleBookmark(post)} >Add to Bookmark</button>}</li>
       </ul>
     </div>
   )
