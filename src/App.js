@@ -43,7 +43,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <Router basename="/react-mini-blog">
         <div className="App">
           <Route path="*" render={(props) => <Header {...props} />} />
           <Route exact path="/" render={() => <Content posts={this.state.posts} bookmarks={this.state.posts.filter(post => post.bookmark)} handleBookmark={this.handleBookmark} handleRemoveBookmark={this.handleRemoveBookmark} />} />
